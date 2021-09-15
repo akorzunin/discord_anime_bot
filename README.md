@@ -12,7 +12,7 @@
   get_waifu      {category}, {amount}(max 30) Shows anime picture. Default category: waifu
     alias: gw
   help           Shows list of commands
-  pog            returns champ
+  pog            returns champ 
   uptime         Shows uptime in format dddd:hh:mm:ss
 </code></pre>
 <h2 id="exapmles">Exapmles</h2>
