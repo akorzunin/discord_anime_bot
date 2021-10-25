@@ -18,6 +18,11 @@ a = AnimePicture()
 async def pog(ctx):
     await ctx.send('champ')
 
+@bot.command(help='Shows time to response')
+async def ping(ctx):
+    time_to_response = round(bot.latency * 1000)
+    await ctx.send(f'{datetime.today()} ping: {time_to_response}ms')
+
 @bot.command(help='{category}(see list w/ >gc), {amount}(max 30) Shows anime picture(s) with waifu',aliases=['gw'])
 async def get_waifu(ctx, category: str=None, amount: int=None):
     if (amount != None) and (category != None):
