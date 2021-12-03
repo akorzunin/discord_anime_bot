@@ -1,4 +1,5 @@
 from urllib.parse import uses_fragment
+import discord
 from discord.ext import commands
 from anime_picture import AnimePicture
 from categories_list import categories, nsfw_categories
@@ -13,6 +14,21 @@ start_time = datetime.today()
 bot = commands.Bot(command_prefix='>')
 a = AnimePicture()
 
+# @bot.event
+# async def on_ready():
+#     print('We have logged in as {0.user}'.format(bot))
+
+# @bot.event
+# async def on_message(message):
+#     if message.author == bot.user:
+#         return
+
+#     # if message.content.startswith('>ping'):
+#     #     await message.channel.send(f'ping: {random.randint(100, 200)}')
+
+#     if message.content.startswith('<@'):
+#         print(message.content)
+#         await message.channel.send(f'{a.get_url()}')
 
 @bot.command(help='champ')
 async def pog(ctx):
@@ -51,8 +67,9 @@ async def uptime(ctx):
     uptime_ = f'uptime: {days}:{hours}:{minutes}:{seconds}'
     await ctx.send(uptime_)
 
-
-
+@bot.command(help='at', aliases=['<@'])
+async def at(ctx):
+    await ctx.send('<@>')
 
 token = bot_token.token
 bot.run(token)

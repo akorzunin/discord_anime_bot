@@ -24,6 +24,10 @@ class AnimePicture(object):
         loaded_json = json.loads(r.text)
         urls = loaded_json['files']
         return urls[:amount]
+    def get_azure(self, amount: int, *args, **kwrags):
+        
+        return urls[:amount]
+        
 
 
 if __name__ == '__main__':
