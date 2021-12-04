@@ -1,4 +1,6 @@
 import asyncio
+import requests
+import random
 
 import discord
 
@@ -19,6 +21,21 @@ class AnimePic(commands.Cog):
     async def get_str(self, ctx, *args, **kwargs):
         print(args)
         await ctx.send('OK')
+    @commands.command(aliases=['al'])
+    async def azure(self, ctx, *args, **kwargs):
+        '''Azure command return random picture with no args, avaliable args are: id {int}, name {str}'''        
+        s = self.a.get_azure(args)
+        if s == 0: 
+            await ctx.send('Not found')
+            return
+        for i in s:
+            # print(i['image'])
+            await ctx.send(i['image'])
+    @commands.command(aliases=['al_list'])
+    async def azure_list(self, ctx, *args, **kwargs):
+        '''Azure list of ids and names'''
+        url = 'https://azurlane.koumakan.jp/wiki/List_of_Ships'
+        await ctx.send(url)
 
     @commands.command(help='{category}(see list w/ >gc), {amount}(max 30) Shows anime picture(s) with waifu',aliases=['gw'])
     async def get_waifu(self, ctx, *args):

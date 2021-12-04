@@ -24,9 +24,48 @@ class AnimePicture(object):
         loaded_json = json.loads(r.text)
         urls = loaded_json['files']
         return urls[:amount]
-    def get_azure(self, amount: int, *args, **kwrags):
-        
-        return urls[:amount]
+    def get_azure(self,  data, *args, **kwrags):
+        args = data
+        try:
+            name = args[0]
+        except IndexError: name = 'random'
+        if name == 'random':
+            url = 'https://formidable.kashima.moe/ships/random'
+        elif name == 'id':
+            try:
+                id = int(args[1])
+            except ValueError: return
+            url = f'https://formidable.kashima.moe/ships/id?code={args[1]}'
+        elif name == 'name':
+            try:
+                url_name = '+'.join(args[1:])
+                url = f'https://formidable.kashima.moe/ships/class?name={url_name}'
+                r = requests.get(url, )
+                data =r.json()
+                if len(data) == 0: 
+                    print(0)
+                    return 0
+                s = data['skins']
+                return s
+            except TypeError: print('s1 failed to parse')
+            try:
+                url_name = '+'.join(args[1:])
+                url = f'https://formidable.kashima.moe/ships/class?name={url_name}'
+                r = requests.get(url, )
+                data =r.json()
+                if len(data) == 0: 
+                    print(0)
+                    return 0
+                return data[0]['skins']
+            except TypeError: print('s2 failed to parse')
+
+        r = requests.get(url, )
+        data =r.json()
+        if len(data) == 0: 
+            print(0)
+            return 0
+        s = data['skins']
+        return s
         
 
 

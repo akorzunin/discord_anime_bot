@@ -16,6 +16,7 @@ from datetime import datetime
 from time import sleep
 
 from discord.ext import commands
+import platform
 
 a = AnimePicture()
 # MSG_DELAY  = 1
@@ -24,7 +25,8 @@ a = AnimePicture()
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
-FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
+if platform.system() == "Windows":
+    FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -43,7 +45,7 @@ ffmpeg_options = {
 }
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(">"),
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("."),
                    description='description')
 
 # not working w/ client

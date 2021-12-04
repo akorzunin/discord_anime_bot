@@ -1,5 +1,5 @@
 import asyncio
-
+import platform
 import discord
 import youtube_dl
 
@@ -13,8 +13,8 @@ from discord.ext import commands
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
-
-FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
+if platform.system() == "Windows":
+    FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
 
 # MSG_DELAY  = 1
 
@@ -82,7 +82,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, executable=FFMPEG_BIN_PATH, **ffmpeg_options), data=data)
+        if platform.system() == "Windows":
+            return cls(discord.FFmpegPCMAudio(filename, executable=FFMPEG_BIN_PATH, **ffmpeg_options), data=data)
+        else: return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 
 class Music(commands.Cog):
@@ -90,6 +92,7 @@ class Music(commands.Cog):
         self.bot = bot
         self.default_volume = 3
         self.current_volume = None
+        # self.loop_flag = False
 
     # # @staticmethod
     # def change_volume(self, obj, volume=None):
@@ -101,11 +104,52 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, query):
         """Plays a file from the local filesystem"""
-
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
+        # def repeat(guild, voice, audio):
+        #     # voice.play(audio, after=lambda e: repeat(guild, voice, audio))
+        #     # voice.is_playing()
+        #     pass
+        # voice = get(self.bot.voice_clients, guild=ctx.guild)
+        if platform.system() == "Windows":
+            source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
+        else: source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query,))
+        # if self.loop_flag:
+        #     pass
+        #     # ctx.voice_client.play(source, after=lambda e: repeat(ctx.guild, ctx.voice_client, source))
+        # else:
         ctx.voice_client.play(source, after=lambda e: print(f'Player error: {e}') if e else None)
         ctx.voice_client.source.volume = self.default_volume / 100
         await ctx.send(f'Now playing: {query}')
+
+    # @commands.command()
+    # async def play(self, ctx, *, query):
+    #     """Plays a file from the local filesystem"""
+    #     # def repeat(guild, voice, audio):
+    #     #     # voice.play(audio, after=lambda e: repeat(guild, voice, audio))
+    #     #     # voice.is_playing()
+    #     #     pass
+    #     # voice = get(self.bot.voice_clients, guild=ctx.guild)
+    #     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
+    #     # if self.loop_flag:
+    #     #     pass
+    #     #     # ctx.voice_client.play(source, after=lambda e: repeat(ctx.guild, ctx.voice_client, source))
+    #     # else:
+    #     ctx.voice_client.play(source, after=lambda e: print(f'Player error: {e}') if e else None)
+    #     ctx.voice_client.source.volume = self.default_volume / 100
+    #     await ctx.send(f'Now playing: {query}')
+    # @commands.command()
+    # async def play(self, ctx, *, query):
+    #     await ctx.channel.purge(limit=1)
+    #     channel = ctx.author.voice.channel
+    #     voice = get(self.bot.voice_clients, guild=ctx.guild)
+
+    #     def repeat(guild, voice, audio):
+    #         voice.play(audio, after=lambda e: repeat(guild, voice, audio))
+    #         voice.is_playing()
+
+    #     if channel and not voice.is_playing():
+    #         audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
+    #         voice.play(audio, after=lambda e: repeat(ctx.guild, voice, audio))
+    #         voice.is_playing()
 
     @commands.command()
     async def yt(self, ctx, *, url):
@@ -143,12 +187,25 @@ class Music(commands.Cog):
         """Changes the player's volume"""
         self.default_volume = volume
         await ctx.send(f"Changed default volume to {volume}%")
+    # reset the volume to default
+
         
     @commands.command(aliases=['disconnect'])
     async def close(self, ctx):
         """Stops and disconnects the bot from voice"""
 
         await ctx.voice_client.disconnect()
+
+    # buffer
+    @commands.command()
+    async def buffer(self, ctx, wait_time: int=5):
+        """Bufferize stream (can take int [seconds])"""
+        msg = await ctx.send('Buffering...')
+        ctx.voice_client.pause()
+        await asyncio.sleep(wait_time)
+        ctx.voice_client.resume()
+        await msg.edit(content='Done')
+        # await ctx.send('Done')
 
     @commands.command(aliases=['halt'])
     async def stop(self, ctx):
@@ -165,6 +222,12 @@ class Music(commands.Cog):
         """Resume player"""
         ctx.voice_client.resume()
         await ctx.send('Resumed')
+    # @commands.command()
+    # async def loop(self, ctx):
+    #     """Loop player"""
+    #     self.loop_flag = not self.loop_flag
+    #     # ctx.voice_client.resume()
+    #     await ctx.send(f'{self.loop_flag=}')
 
     @commands.command(aliases=['mjoin'])
     async def manual_join(self, ctx, *, channel: discord.VoiceChannel):
