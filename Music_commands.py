@@ -1,15 +1,19 @@
 import asyncio
 import platform
+import random
 import discord
+import requests
 import youtube_dl
 
 from Basic_commands import Basic
 from Anime_Pic import AnimePic
+from Gachi_handler import GachiHandler
+
 from datetime import datetime
 from time import sleep
 
 from discord.ext import commands
-
+from discord.ext.commands.errors import CommandInvokeError
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -66,7 +70,6 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
-
         self.data = data
 
         self.title = data.get('title')
@@ -92,6 +95,7 @@ class Music(commands.Cog):
         self.bot = bot
         self.default_volume = 3
         self.current_volume = None
+        self.g = GachiHandler()
         # self.loop_flag = False
 
     # # @staticmethod
@@ -150,6 +154,28 @@ class Music(commands.Cog):
     #         audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
     #         voice.play(audio, after=lambda e: repeat(ctx.guild, voice, audio))
     #         voice.is_playing()
+
+    # region
+    
+    @commands.command(aliases=['gm'])
+    async def gachi(self, ctx, *args):
+        """Gachi command"""
+        query = ' '.join(args)
+        gachi_dict = self.g.validate_gachi(query)
+        if len(gachi_dict) == 0: 
+            await ctx.send('Not Found')
+            return
+        gachi_tuple = random.choice(list(gachi_dict.items()))
+        url = f'http://soundboard.ass-we-can.com/static/music/{gachi_tuple[1]}/{gachi_tuple[0]}.mp3'
+        async with ctx.typing():
+            player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
+            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            ctx.voice_client.source.volume = self.default_volume / 100
+            # change_volume(player, self.default_volume)
+        await ctx.send(f'Now playing: {player.title}')
+
+
+    # endregion
 
     @commands.command()
     async def yt(self, ctx, *, url):
@@ -252,6 +278,7 @@ class Music(commands.Cog):
     @play.before_invoke
     @yt.before_invoke
     @stream.before_invoke
+    @gachi.before_invoke # move later
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:

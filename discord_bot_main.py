@@ -19,14 +19,15 @@ from discord.ext import commands
 import platform
 
 a = AnimePicture()
-# MSG_DELAY  = 1
-# start_time = datetime.today()
+PREFIX = '.'
+# PREXIX = os.getenv('PREFIX')
 
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 if platform.system() == "Windows":
     FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
+    # FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH')
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -45,7 +46,7 @@ ffmpeg_options = {
 }
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("."),
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
                    description='description')
 
 # not working w/ client
@@ -55,7 +56,7 @@ async def on_message(message):
         return
     # user <@!{int}> 
     # role <@&{int}>
-    if message.content.startswith('<@'):
+    if message.content.startswith(f'{PREFIX}<@'):
         print(message.content)
         await message.channel.send(f'{a.get_url()}')
 
