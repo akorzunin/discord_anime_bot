@@ -1,0 +1,1 @@
+nohup python discord_bot_main.py &
