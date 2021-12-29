@@ -13,5 +13,5 @@ class AnimeCh(commands.Cog):
     @commands.command(help='Shows link to a host', aliases=['ac'])
     async def anime_challenge(self, ctx):
         host_ip = get('https://api.ipify.org').content.decode('utf8')
-        await ctx.send(f'At {datetime.today()} \nCurrent host location is: {host_ip}:5050/')
+        await ctx.send(f'At {datetime.today()} \nCurrent host location is: http://{host_ip}:5050/')
 
