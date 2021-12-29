@@ -17,7 +17,7 @@ class Basic(commands.Cog):
         await ctx.send(f'{datetime.today()} ping: {time_to_response}ms')
 
     @commands.command(help='Shows uptime in format dddd:hh:mm:ss' ,)
-    async def uptime(self, ctx):
+    async def uptime(self, ctx):  # sourcery skip: square-identity
         u = datetime.today() - self.start_time
         upt = u.seconds
         days = upt//(60*60*24) # dddd

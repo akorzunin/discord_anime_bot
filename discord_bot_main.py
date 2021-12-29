@@ -8,6 +8,7 @@ import youtube_dl
 from Basic_commands import Basic
 from Anime_Pic import AnimePic
 from Music_commands import Music
+from anime_ch_commands import AnimeCh
 
 from anime_picture import AnimePicture
 from categories_list import categories, nsfw_categories
@@ -74,5 +75,6 @@ async def on_ready():
 bot.add_cog(Basic(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(AnimePic(bot))
+bot.add_cog(AnimeCh(bot))
 bot.run(BOT_TOKEN)
 # need pynacl
