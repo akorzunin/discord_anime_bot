@@ -3,7 +3,7 @@ import asyncio
 import discord
 import youtube_dl
 
-import bot_token
+# import bot_token
 
 from Basic_commands import Basic
 from Anime_Pic import AnimePic
@@ -18,9 +18,15 @@ from time import sleep
 from discord.ext import commands
 import platform
 
+#load .env variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+PREFIX = os.getenv('PREFIX', '.')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH', None)
 a = AnimePicture()
-PREFIX = '.'
-# PREXIX = os.getenv('PREFIX')
 
 
 # Suppress noise about console usage from errors
@@ -68,5 +74,5 @@ async def on_ready():
 bot.add_cog(Basic(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(AnimePic(bot))
-bot.run(bot_token.token)
+bot.run(BOT_TOKEN)
 # need pynacl

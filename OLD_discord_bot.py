@@ -40,7 +40,9 @@ async def ping(ctx):
     await ctx.send(f'{datetime.today()} ping: {time_to_response}ms')
 
 @bot.command(help='{category}(see list w/ >gc), {amount}(max 30) Shows anime picture(s) with waifu',aliases=['gw'])
+# get_waifu (self, )
 async def get_waifu(ctx, category: str=None, amount: int=None):
+    # TODO refactor
     if (amount != None) and (category != None):
         data = a.get_urls(amount, category=category)
         for i in data:

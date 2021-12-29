@@ -1,3 +1,7 @@
 
 *.pyc
 bot_token.py
+**/.env
+**/.vscode
+**/__pycache__
+**.ipynb
