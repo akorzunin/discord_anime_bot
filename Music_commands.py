@@ -13,6 +13,7 @@ from datetime import datetime
 from time import sleep
 
 from discord.ext import commands
+from discord.ext import tasks
 from discord.ext.commands.errors import CommandInvokeError
 
 # Suppress noise about console usage from errors
@@ -97,6 +98,8 @@ class Music(commands.Cog):
         self.current_volume = None
         self.g = GachiHandler()
         # self.loop_flag = False
+        
+
 
     # # @staticmethod
     # def change_volume(self, obj, volume=None):
@@ -274,7 +277,8 @@ class Music(commands.Cog):
     async def get_volume(self, ctx, ):
         """Return current volume level"""
         await ctx.send(f"Current volume: {ctx.voice_client.source.volume*100}\nDefault volume: {self.default_volume}")
-        
+
+     
     @play.before_invoke
     @yt.before_invoke
     @stream.before_invoke

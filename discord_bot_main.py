@@ -9,6 +9,7 @@ from Basic_commands import Basic
 from Anime_Pic import AnimePic
 from Music_commands import Music
 from anime_ch_commands import AnimeCh
+from Daily_Task import DailyTask
 
 from anime_picture import AnimePicture
 from categories_list import categories, nsfw_categories
@@ -61,6 +62,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
 async def on_message(message):
     if message.author == bot.user:
         return
+        
     # user <@!{int}> 
     # role <@&{int}>
     if message.content.startswith(f'{PREFIX}<@'):
@@ -72,9 +74,13 @@ async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
 
+
 bot.add_cog(Basic(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(AnimePic(bot))
 bot.add_cog(AnimeCh(bot))
+bot.add_cog(DailyTask(bot))
+
+# bot.loop.create_task(check())
 bot.run(BOT_TOKEN)
 # need pynacl
