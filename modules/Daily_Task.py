@@ -59,16 +59,16 @@ class DailyTask(commands.Cog):
         self.printer_nasa.cancel()
     
     def clear_list(self, filename):
-        with open(PWD+f'\\static_data\\{filename}.pkl', 'wb') as f:
+        with open(PWD+f'/static_data/{filename}.pkl', 'wb') as f:
             pickle.dump([], f)
 
     def write_list_to_file(self, list_, filename):
-        with open(PWD+f'\\static_data\\{filename}.pkl', 'wb') as f:
+        with open(PWD+f'/static_data/{filename}.pkl', 'wb') as f:
             pickle.dump(set(list_), f)
 
     def get_list_from_file(self, filename) -> list:
         try:
-            with open(PWD+f'\\static_data\\{filename}.pkl', 'rb') as f:
+            with open(PWD+f'/static_data/{filename}.pkl', 'rb') as f:
                 list_ = list(pickle.load(f))
         except FileNotFoundError: 
             self.clear_list(filename)

@@ -11,8 +11,8 @@ load_dotenv()
 PWD = os.getenv('PWD')
 
 import sys
-sys.path.insert(1, PWD+'\\modules')
-sys.path.insert(1, PWD+'\\static_data')
+sys.path.insert(1, PWD+'/modules')
+sys.path.insert(1, PWD+'/static_data')
 
 
 from modules.Basic_commands import Basic

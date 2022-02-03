@@ -11,7 +11,7 @@ load_dotenv()
 PWD = os.getenv('PWD')
 
 import sys
-sys.path.insert(1, PWD+'\\static_data')
+sys.path.insert(1, PWD+'/static_data')
 
 from anime_picture import AnimePicture
 from static_data.categories_list import categories, nsfw_categories
