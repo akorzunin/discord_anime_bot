@@ -1,18 +1,28 @@
 import asyncio
+import logging
 
 import discord
 import youtube_dl
 
-# import bot_token
+#load .env variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PWD = os.getenv('PWD')
 
-from Basic_commands import Basic
-from Anime_Pic import AnimePic
-from Music_commands import Music
-from anime_ch_commands import AnimeCh
-from Daily_Task import DailyTask
+import sys
+sys.path.insert(1, PWD+'\\modules')
+sys.path.insert(1, PWD+'\\static_data')
 
-from anime_picture import AnimePicture
-from categories_list import categories, nsfw_categories
+
+from modules.Basic_commands import Basic
+from modules.Anime_Pic import AnimePic
+from modules.Music_commands import Music
+from modules.anime_ch_commands import AnimeCh
+from modules.Daily_Task import DailyTask
+from modules.anime_picture import AnimePicture
+
+from static_data.categories_list import categories, nsfw_categories
 
 from datetime import datetime
 from time import sleep
@@ -28,10 +38,22 @@ load_dotenv()
 PREFIX = os.getenv('PREFIX', '.')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH', None)
-a = AnimePicture()
+LOGGING_LEVEL = os.getenv('LOGGING_LEVEL', logging.INFO)
+
+import logging
+DEBUG = __debug__ 
+LOG_FILE_NAME = 'logs.log'
+format = '%(asctime)s [%(levelname)s]: %(message)s'
+logger = logging.basicConfig(
+    filename=LOG_FILE_NAME if not DEBUG else None, 
+    format=format,
+    encoding='utf-8', 
+    level=LOGGING_LEVEL, 
+)
+if not DEBUG:
+    logging.getLogger(logger).addHandler(logging.StreamHandler())
 
 
-# Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 if platform.system() == "Windows":
     FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
@@ -57,7 +79,8 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
                    description='description')
 
-# not working w/ client
+a = AnimePicture()
+
 @bot.listen('on_message')
 async def on_message(message):
     if message.author == bot.user:
@@ -66,14 +89,14 @@ async def on_message(message):
     # user <@!{int}> 
     # role <@&{int}>
     if message.content.startswith(f'{PREFIX}<@'):
-        print(message.content)
+        logging.debug(message.content)
         await message.channel.send(f'{a.get_url()}')
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
-    print('------')
-
+    logging.info(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    logging.info('------')
+    
 
 bot.add_cog(Basic(bot))
 bot.add_cog(Music(bot))
@@ -81,6 +104,5 @@ bot.add_cog(AnimePic(bot))
 bot.add_cog(AnimeCh(bot))
 bot.add_cog(DailyTask(bot))
 
-# bot.loop.create_task(check())
 bot.run(BOT_TOKEN)
 # need pynacl

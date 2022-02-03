@@ -5,3 +5,4 @@ bot_token.py
 **/.vscode
 **/__pycache__
 **.ipynb
+**/deprecated

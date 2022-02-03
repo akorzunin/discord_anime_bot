@@ -1,3 +1,4 @@
+import logging
 import requests
 import json
 from random import choice
@@ -43,26 +44,26 @@ class AnimePicture(object):
                 r = requests.get(url, )
                 data =r.json()
                 if len(data) == 0: 
-                    print(0)
+                    logging.debug(0)
                     return 0
                 s = data['skins']
                 return s
-            except TypeError: print('s1 failed to parse')
+            except TypeError: logging.debug('s1 failed to parse')
             try:
                 url_name = '+'.join(args[1:])
                 url = f'https://formidable.kashima.moe/ships/class?name={url_name}'
                 r = requests.get(url, )
                 data =r.json()
                 if len(data) == 0: 
-                    print(0)
+                    logging.debug(0)
                     return 0
                 return data[0]['skins']
-            except TypeError: print('s2 failed to parse')
+            except TypeError: logging.debug('s2 failed to parse')
 
         r = requests.get(url, )
         data =r.json()
         if len(data) == 0: 
-            print(0)
+            logging.debug(0)
             return 0
         s = data['skins']
         return s

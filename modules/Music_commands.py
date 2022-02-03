@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import platform
 import random
 import discord
@@ -123,7 +124,7 @@ class Music(commands.Cog):
         #     pass
         #     # ctx.voice_client.play(source, after=lambda e: repeat(ctx.guild, ctx.voice_client, source))
         # else:
-        ctx.voice_client.play(source, after=lambda e: print(f'Player error: {e}') if e else None)
+        ctx.voice_client.play(source, after=lambda e: logging.debug(f'Player error: {e}') if e else None)
         ctx.voice_client.source.volume = self.default_volume / 100
         await ctx.send(f'Now playing: {query}')
 
@@ -172,7 +173,7 @@ class Music(commands.Cog):
         url = f'http://soundboard.ass-we-can.com/static/music/{gachi_tuple[1]}/{gachi_tuple[0]}.mp3'
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            ctx.voice_client.play(player, after=lambda e: logging.debug(f'Player error: {e}') if e else None)
             ctx.voice_client.source.volume = self.default_volume / 100
             # change_volume(player, self.default_volume)
         await ctx.send(f'Now playing: {player.title}')
@@ -186,7 +187,7 @@ class Music(commands.Cog):
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
-            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            ctx.voice_client.play(player, after=lambda e: logging.debug(f'Player error: {e}') if e else None)
 
         await ctx.send(f'Now playing: {player.title}')
 
@@ -196,7 +197,7 @@ class Music(commands.Cog):
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            ctx.voice_client.play(player, after=lambda e: logging.debug(f'Player error: {e}') if e else None)
             ctx.voice_client.source.volume = self.default_volume / 100
             # change_volume(player, self.default_volume)
         await ctx.send(f'Now playing: {player.title}')

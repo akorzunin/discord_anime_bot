@@ -1,12 +1,18 @@
+import logging
 import requests
 import yaml
 
+#load .env variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PWD = os.getenv('PWD')
 
 class GachiHandler(object): 
     '''docstring for ClassName'''
     def __init__(self, *args):
         super(GachiHandler, self).__init__()
-        with open('gachi_dict.yaml', 'r') as f: 
+        with open(PWD+'\\static_data\\gachi_dict.yaml', 'r') as f: 
             self.r = yaml.load(f, Loader=yaml.FullLoader)
 
 
@@ -18,7 +24,7 @@ class GachiHandler(object):
             if (str(key).lower().find(query.lower())) > -1:
                 r_val.append(val)
                 r_key.append(key)
-                print( val, key)
+                logging.debug( f"{val}, {key}")
         return dict(zip(r_key, r_val))
 
 if __name__ == '__main__':

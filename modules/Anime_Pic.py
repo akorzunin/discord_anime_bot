@@ -1,11 +1,20 @@
 import asyncio
+import logging
 import requests
 import random
 
 import discord
+#load .env variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PWD = os.getenv('PWD')
+
+import sys
+sys.path.insert(1, PWD+'\\static_data')
 
 from anime_picture import AnimePicture
-from categories_list import categories, nsfw_categories
+from static_data.categories_list import categories, nsfw_categories
 
 from datetime import datetime
 from time import sleep
@@ -19,7 +28,7 @@ class AnimePic(commands.Cog):
         self.a = AnimePicture()
     @commands.command()
     async def get_str(self, ctx, *args, **kwargs):
-        print(args)
+        logging.debug(args)
         await ctx.send('OK')
     @commands.command(aliases=['al'])
     async def azure(self, ctx, *args, **kwargs):
@@ -29,7 +38,6 @@ class AnimePic(commands.Cog):
             await ctx.send('Not found')
             return
         for i in s:
-            # print(i['image'])
             await ctx.send(i['image'])
     @commands.command(aliases=['al_list'])
     async def azure_list(self, ctx, *args, **kwargs):
@@ -74,7 +82,7 @@ class AnimePic(commands.Cog):
                 return category, amount
         category, amount = handle_args(args)
 
-        print(f'{category=}, {amount=}')
+        logging.debug(f'{category=}, {amount=}')
         if (amount != None) and (category != None):
             data = self.a.get_urls(amount, category=category)
             for i in data:
