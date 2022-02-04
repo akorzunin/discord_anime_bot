@@ -176,7 +176,7 @@ class DailyTask(commands.Cog):
 
 # 60 * 60 * 24  seconds in day
     #loop for daily waifu mailing
-    @tasks.loop(seconds=(60 * 60 * 24),)
+    @tasks.loop(seconds=(60),)
     async def printer_waifu(self, ):
         await utils.sleep_until(self.trigger_time_waifu)
         self.trigger_time_waifu = self.trigger_time_waifu.replace(day=self.trigger_time_waifu.day+1)
