@@ -95,7 +95,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.default_volume = 3
+        self.default_volume = 80
         self.current_volume = None
         self.g = GachiHandler()
         # self.loop_flag = False
