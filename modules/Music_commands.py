@@ -279,7 +279,7 @@ class Music(commands.Cog):
         """Return current volume level"""
         await ctx.send(f"Current volume: {ctx.voice_client.source.volume*100}\nDefault volume: {self.default_volume}")
 
-     
+    
     @play.before_invoke
     @yt.before_invoke
     @stream.before_invoke

@@ -1,7 +1,7 @@
 import logging
 import pickle
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from discord import utils
 from discord import Embed
@@ -59,16 +59,16 @@ class DailyTask(commands.Cog):
         self.printer_nasa.cancel()
     
     def clear_list(self, filename):
-        with open(PWD+f'/static_data/{filename}.pkl', 'wb') as f:
+        with open(f'{PWD}/static_data/{filename}.pkl', 'wb') as f:
             pickle.dump([], f)
 
     def write_list_to_file(self, list_, filename):
-        with open(PWD+f'/static_data/{filename}.pkl', 'wb') as f:
+        with open(f'{PWD}/static_data/{filename}.pkl', 'wb') as f:
             pickle.dump(set(list_), f)
 
     def get_list_from_file(self, filename) -> list:
         try:
-            with open(PWD+f'/static_data/{filename}.pkl', 'rb') as f:
+            with open(f'{PWD}/static_data/{filename}.pkl', 'rb') as f:
                 list_ = list(pickle.load(f))
         except FileNotFoundError: 
             self.clear_list(filename)
@@ -141,8 +141,7 @@ class DailyTask(commands.Cog):
             )
         td = self.trigger_time_waifu - datetime.now(self.tzdata)
         if td.total_seconds() < 0:
-            self.trigger_time_waifu = self.trigger_time_waifu\
-                                        .replace(day=self.trigger_time_waifu.day+1)
+            self.trigger_time_waifu = self.trigger_time_waifu + timedelta(days=1)
         await ctx.send(f'Next call time: {self.trigger_time_waifu}')
         await ctx.send(f'Time delta: {self.trigger_time_waifu - datetime.now(self.tzdata)}')
 
@@ -160,8 +159,7 @@ class DailyTask(commands.Cog):
             )
         td = self.trigger_time_nasa - datetime.now(self.tzdata)
         if td.total_seconds() < 0:
-            self.trigger_time_nasa = self.trigger_time_nasa\
-                                        .replace(day=self.trigger_time_nasa.day+1)
+            self.trigger_time_nasa = self.trigger_time_nasa + timedelta(days=1)
         await ctx.send(f'Next call time: {self.trigger_time_nasa}')
         await ctx.send(f'Time delta: {self.trigger_time_nasa - datetime.now(self.tzdata)}')
     
@@ -179,7 +177,7 @@ class DailyTask(commands.Cog):
     @tasks.loop(seconds=(60),)
     async def printer_waifu(self, ):
         await utils.sleep_until(self.trigger_time_waifu)
-        self.trigger_time_waifu = self.trigger_time_waifu.replace(day=self.trigger_time_waifu.day+1)
+        self.trigger_time_waifu = self.trigger_time_waifu + timedelta(days=1)
         url = self.a.get_url()
         embed = Embed(
             title='Daily waifu picture:',
@@ -195,7 +193,7 @@ class DailyTask(commands.Cog):
     @tasks.loop(seconds=(60),)
     async def printer_nasa(self, ):
         await utils.sleep_until(self.trigger_time_nasa)
-        self.trigger_time_nasa = self.trigger_time_nasa.replace(day=self.trigger_time_nasa.day+1)
+        self.trigger_time_nasa = self.trigger_time_nasa + timedelta(days=1)
         url, title, explanation, stat, stat_value = self.n.get_url()
         embed = Embed(
             title=title,
