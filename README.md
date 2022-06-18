@@ -15,7 +15,7 @@
   pog            returns champ 
   uptime         Shows uptime in format dddd:hh:mm:ss
 </code></pre>
-<h2 id="exapmles">Exapmles</h2>
+<h2 id="exapmles">Examples</h2>
 <pre><code>&gt;gc
 ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke', 'dance', 'cringe']
 
