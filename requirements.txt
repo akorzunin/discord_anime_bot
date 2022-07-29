@@ -7,7 +7,10 @@ charset-normalizer==2.1.0; python_version >= "3.7" and python_version < "4" and 
 discord.py==1.7.3; python_full_version >= "3.5.3"
 discord==1.7.3
 idna==3.3; python_version >= "3.7" and python_version < "4" and python_full_version >= "3.5.3"
+motor==3.0.0; python_version >= "3.7"
 multidict==6.0.2; python_version >= "3.7" and python_full_version >= "3.5.3"
+nest-asyncio==1.5.5; python_version >= "3.5"
+pymongo==4.2.0; python_version >= "3.7"
 python-dotenv==0.20.0; python_version >= "3.5"
 pytz==2022.1
 pyyaml==6.0; python_version >= "3.6"
