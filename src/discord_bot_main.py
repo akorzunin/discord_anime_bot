@@ -15,6 +15,7 @@ from modules.Music_commands import Music
 from modules.anime_ch_commands import AnimeCh
 from modules.Daily_Task import DailyTask
 from modules.anime_picture import AnimePicture
+from modules.db_connector import db, client
 
 from static_data.categories_list import categories, nsfw_categories
 
@@ -90,13 +91,20 @@ async def on_message(message):
 async def on_ready():
     logging.info(f'Logged in as {bot.user} (ID: {bot.user.id})')
     logging.info('------')
+    logging.info(await client.get_info())
     
+if bool(os.getenv('DEBUG')):
+    import nest_asyncio
+    nest_asyncio.apply(bot.loop) 
+
 
 bot.add_cog(Basic(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(AnimePic(bot))
 bot.add_cog(AnimeCh(bot))
 bot.add_cog(DailyTask(bot))
+
+def get_event_loop(): return bot.loop
 
 bot.run(BOT_TOKEN)
 # need pynacl
