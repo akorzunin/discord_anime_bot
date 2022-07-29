@@ -9,12 +9,12 @@ print(PWD)
 
 
 
-from modules.Basic_commands import Basic
-from modules.Anime_Pic import AnimePic
-from modules.Music_commands import Music
+from modules.basic_commands import Basic
+from modules.anime_pic import AnimePic
+from modules.music_commands import Music
 from modules.anime_ch_commands import AnimeCh
-from modules.Daily_Task import DailyTask
-from modules.anime_picture import AnimePicture
+from modules.daily_task import DailyTask
+from modules.anime_picture_api import AnimePicture
 from modules.db_connector import db, memes
 from tinydb import TinyDB, Query
 from static_data.categories_list import categories, nsfw_categories
