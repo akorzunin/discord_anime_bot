@@ -199,6 +199,14 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "tinydb"
+version = "4.7.0"
+description = "TinyDB is a tiny, document oriented database optimized for your happiness :)"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "typing-extensions"
 version = "4.3.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -242,7 +250,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "e0f7734a2f0505e98e691e17880018d340f43ea9fc7cade3c2589d4b3b2d05ba"
+content-hash = "b955c07764bac8eb99d1174d33fda3bc4bc0de620b7672859cc10b6795e96809"
 
 [metadata.files]
 aiohttp = []
@@ -337,6 +345,7 @@ pytz = [
 ]
 pyyaml = []
 requests = []
+tinydb = []
 typing-extensions = []
 urllib3 = []
 yarl = [
