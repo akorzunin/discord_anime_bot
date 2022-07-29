@@ -6,12 +6,13 @@ import random
 import discord
 #load .env variables
 import os
-from dotenv import load_dotenv
-load_dotenv()
-PWD = os.getenv('PWD')
+# from dotenv import load_dotenv
+# load_dotenv()
+# PWD = os.getenv('PWD')
+PWD = os.path.abspath(os.getcwd())
 
 import sys
-sys.path.insert(1, PWD+'/static_data')
+sys.path.insert(1, os.path.join(PWD, 'static_data'))
 
 from anime_picture import AnimePicture
 from static_data.categories_list import categories, nsfw_categories

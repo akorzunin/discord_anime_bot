@@ -4,3 +4,5 @@ discord==1.7.3
 python-dotenv==0.19.2
 PyYAML==6.0
 youtube_dl==2021.12.17
+pytz
+PyNaCl

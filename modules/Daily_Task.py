@@ -14,7 +14,8 @@ from nasa_picture import NasaPicture
 import os
 from dotenv import load_dotenv
 load_dotenv()
-PWD = os.getenv('PWD')
+# PWD = os.getenv('PWD')
+PWD = os.path.abspath(os.getcwd())
 
 class DailyTask(commands.Cog):
     def __init__(self, bot):
@@ -53,22 +54,24 @@ class DailyTask(commands.Cog):
                         microsecond=0
                     )  
             ) 
+    def _get_file_path(self, filename):
+        return os.path.join(PWD, 'static_data', f'{filename}.pkl')
 
     def cog_unload(self):
         self.printer_waifu.cancel()
         self.printer_nasa.cancel()
     
     def clear_list(self, filename):
-        with open(f'{PWD}/static_data/{filename}.pkl', 'wb') as f:
+        with open(self._get_file_path(filename), 'wb') as f:
             pickle.dump([], f)
 
     def write_list_to_file(self, list_, filename):
-        with open(f'{PWD}/static_data/{filename}.pkl', 'wb') as f:
+        with open(self._get_file_path(filename), 'wb') as f:
             pickle.dump(set(list_), f)
 
     def get_list_from_file(self, filename) -> list:
         try:
-            with open(f'{PWD}/static_data/{filename}.pkl', 'rb') as f:
+            with open(self._get_file_path(filename), 'rb') as f:
                 list_ = list(pickle.load(f))
         except FileNotFoundError: 
             self.clear_list(filename)

@@ -6,3 +6,4 @@ bot_token.py
 **/__pycache__
 **.ipynb
 **/deprecated
+*.pkl

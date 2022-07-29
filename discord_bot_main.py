@@ -9,10 +9,11 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 PWD = os.getenv('PWD')
-
+print(PWD)
+PWD = os.path.abspath(os.getcwd())
 import sys
-sys.path.insert(1, PWD+'/modules')
-sys.path.insert(1, PWD+'/static_data')
+sys.path.insert(1, os.path.join(PWD, 'modules'))
+sys.path.insert(1, os.path.join(PWD, 'static_data'))
 
 
 from modules.Basic_commands import Basic
