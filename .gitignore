@@ -7,3 +7,4 @@ bot_token.py
 **.ipynb
 **/deprecated
 *.pkl
+**/data

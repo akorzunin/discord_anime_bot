@@ -6,16 +6,11 @@ import discord
 import requests
 import youtube_dl
 
-from Basic_commands import Basic
-from Anime_Pic import AnimePic
-from Gachi_handler import GachiHandler
+from modules.Gachi_handler import GachiHandler
 
-from datetime import datetime
-from time import sleep
+
 
 from discord.ext import commands
-from discord.ext import tasks
-from discord.ext.commands.errors import CommandInvokeError
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''

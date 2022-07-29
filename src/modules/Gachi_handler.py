@@ -2,18 +2,14 @@ import logging
 import requests
 import yaml
 
-#load .env variables
 import os
-from dotenv import load_dotenv
-load_dotenv()
-# PWD = os.getenv('PWD')
 PWD = os.path.abspath(os.getcwd())
 
 class GachiHandler(object): 
     '''docstring for ClassName'''
     def __init__(self, *args):
         super(GachiHandler, self).__init__()
-        with open(os.path.join(PWD, 'static_data', 'gachi_dict.yaml'), 'r') as f: 
+        with open(os.path.join(PWD, 'src', 'static_data', 'gachi_dict.yaml'), 'r') as f: 
             self.r = yaml.load(f, Loader=yaml.FullLoader)
 
 

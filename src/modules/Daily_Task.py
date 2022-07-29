@@ -7,14 +7,10 @@ from discord import utils
 from discord import Embed
 from discord import Colour
 from discord.ext import tasks, commands
-from anime_picture import AnimePicture
-from nasa_picture import NasaPicture
+from modules.anime_picture import AnimePicture
+from modules.nasa_picture import NasaPicture
 
-#load .env variables
 import os
-from dotenv import load_dotenv
-load_dotenv()
-# PWD = os.getenv('PWD')
 PWD = os.path.abspath(os.getcwd())
 
 class DailyTask(commands.Cog):
@@ -55,7 +51,7 @@ class DailyTask(commands.Cog):
                     )  
             ) 
     def _get_file_path(self, filename):
-        return os.path.join(PWD, 'static_data', f'{filename}.pkl')
+        return os.path.join(PWD, 'src', 'static_data', f'{filename}.pkl')
 
     def cog_unload(self):
         self.printer_waifu.cancel()

@@ -5,6 +5,8 @@ from requests import get
 
 
 from discord.ext import commands
+
+
 class AnimeCh(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -3,17 +3,10 @@ import logging
 
 import discord
 import youtube_dl
-
-#load .env variables
 import os
-from dotenv import load_dotenv
-load_dotenv()
-PWD = os.getenv('PWD')
-print(PWD)
 PWD = os.path.abspath(os.getcwd())
-import sys
-sys.path.insert(1, os.path.join(PWD, 'modules'))
-sys.path.insert(1, os.path.join(PWD, 'static_data'))
+print(PWD)
+
 
 
 from modules.Basic_commands import Basic
