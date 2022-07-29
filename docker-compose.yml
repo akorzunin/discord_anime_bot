@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data/db.json:/app/data/db.json
+      - ./data:/app/data
   # mongodb:
   #     image: mongo:5.0
   #     container_name: mongodb
@@ -35,4 +35,3 @@ services:
 
 volumes:
   db:
-    
