@@ -18,7 +18,7 @@ class GachiHandler(object):
         r_val = []
         r_key = []
         for key, val in r.items():
-            if (str(key).lower().find(query.lower())) > -1:
+            if query.lower() in str(key).lower():
                 r_val.append(val)
                 r_key.append(key)
                 logging.debug( f"{val}, {key}")
