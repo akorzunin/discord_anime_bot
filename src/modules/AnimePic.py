@@ -6,7 +6,7 @@ import random
 import discord
 #load .env variables
 
-from modules.anime_picture_api import AnimePicture
+from modules.AnimePictureApi import AnimePicture
 from static_data.categories_list import categories, nsfw_categories
 
 from datetime import datetime

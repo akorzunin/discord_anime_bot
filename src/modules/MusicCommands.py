@@ -6,7 +6,7 @@ import discord
 import requests
 import youtube_dl
 
-from modules.gachi_handler import GachiHandler
+from modules.GachiHandler import GachiHandler
 
 
 

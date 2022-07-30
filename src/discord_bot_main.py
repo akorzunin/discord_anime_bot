@@ -2,35 +2,32 @@
 import asyncio
 import logging
 
-import discord
-import youtube_dl
 import os
-PWD = os.path.abspath(os.getcwd())
-print(PWD)
-
-
-
-from modules.basic_commands import Basic
-from modules.anime_pic import AnimePic
-from modules.music_commands import Music
-from modules.anime_ch_commands import AnimeCh
-from modules.daily_task import DailyTask
-from modules.anime_picture_api import AnimePicture
-from modules.db_connector import db, memes
-from tinydb import TinyDB, Query
-from static_data.categories_list import categories, nsfw_categories
-
+import youtube_dl
 from datetime import datetime
 from time import sleep
-
-from discord.ext import commands
 import platform
+from tinydb import TinyDB, Query
+import discord
+from discord.ext import commands
+
+
+from modules.BasicCommands import Basic
+from modules.AnimePic import AnimePic
+from modules.MusicCommands import Music
+from modules.AnimeChCommands import AnimeCh
+from modules.DailyTask import DailyTask
+from modules.AnimePictureApi import AnimePicture
+from modules.db_connector import db, memes
+from static_data.categories_list import categories, nsfw_categories
+
 
 #load .env variables
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
+PWD = os.path.abspath(os.getcwd())
 PREFIX = os.getenv('PREFIX', '.')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH', None)

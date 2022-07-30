@@ -7,8 +7,8 @@ from discord import utils
 from discord import Embed
 from discord import Colour
 from discord.ext import tasks, commands
-from modules.anime_picture_api import AnimePicture
-from modules.nasa_picture import NasaPicture
+from modules.AnimePictureApi import AnimePicture
+from modules.NasaPicture import NasaPicture
 
 import os
 PWD = os.path.abspath(os.getcwd())
