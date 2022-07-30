@@ -13,9 +13,12 @@ services:
       - .env
     volumes:
       - ./data:/app/data
+  ffmpeg:
+    image: linuxserver/ffmpeg:latest
+    container_name: ffmpeg
+
   # mongodb:
   #     image: mongo
-  #     container_name: mongodb
   #     ports:
   #       - 2717:27017
   #     volumes:

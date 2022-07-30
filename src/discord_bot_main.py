@@ -1,3 +1,4 @@
+# sourcery skip: swap-if-expression
 import asyncio
 import logging
 

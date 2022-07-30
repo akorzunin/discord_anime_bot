@@ -53,8 +53,8 @@ ytdl_format_options = {
     # the downloader (see youtube_dl/downloader/common.py):
     # buffersize
 
-        # ffmpeg_location:   Location of the ffmpeg/avconv binary; either the path
-        #                to the binary or its containing directory.
+    # ffmpeg_location:   Location of the ffmpeg/avconv binary; either the path
+    #                to the binary or its containing directory.
 }
 
 ffmpeg_options = {
@@ -92,67 +92,17 @@ class Music(commands.Cog):
         self.bot = bot
         self.default_volume = 80
         self.current_volume = None
-        self.g = GachiHandler()
-        # self.loop_flag = False
-        
-
-
-    # # @staticmethod
-    # def change_volume(self, obj, volume=None):
-    #     if volume is None: volume = self.default_volume
-    #     obj = volume / 100
-    #     self.current_volume = volume
-    #     return self.current_volume
+        self.g_handler = GachiHandler()
 
     @commands.command()
     async def play(self, ctx, *, query):
         """Plays a file from the local filesystem"""
-        # def repeat(guild, voice, audio):
-        #     # voice.play(audio, after=lambda e: repeat(guild, voice, audio))
-        #     # voice.is_playing()
-        #     pass
-        # voice = get(self.bot.voice_clients, guild=ctx.guild)
         if platform.system() == "Windows":
             source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
         else: source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query,))
-        # if self.loop_flag:
-        #     pass
-        #     # ctx.voice_client.play(source, after=lambda e: repeat(ctx.guild, ctx.voice_client, source))
-        # else:
         ctx.voice_client.play(source, after=lambda e: logging.debug(f'Player error: {e}') if e else None)
         ctx.voice_client.source.volume = self.default_volume / 100
         await ctx.send(f'Now playing: {query}')
-
-    # @commands.command()
-    # async def play(self, ctx, *, query):
-    #     """Plays a file from the local filesystem"""
-    #     # def repeat(guild, voice, audio):
-    #     #     # voice.play(audio, after=lambda e: repeat(guild, voice, audio))
-    #     #     # voice.is_playing()
-    #     #     pass
-    #     # voice = get(self.bot.voice_clients, guild=ctx.guild)
-    #     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
-    #     # if self.loop_flag:
-    #     #     pass
-    #     #     # ctx.voice_client.play(source, after=lambda e: repeat(ctx.guild, ctx.voice_client, source))
-    #     # else:
-    #     ctx.voice_client.play(source, after=lambda e: print(f'Player error: {e}') if e else None)
-    #     ctx.voice_client.source.volume = self.default_volume / 100
-    #     await ctx.send(f'Now playing: {query}')
-    # @commands.command()
-    # async def play(self, ctx, *, query):
-    #     await ctx.channel.purge(limit=1)
-    #     channel = ctx.author.voice.channel
-    #     voice = get(self.bot.voice_clients, guild=ctx.guild)
-
-    #     def repeat(guild, voice, audio):
-    #         voice.play(audio, after=lambda e: repeat(guild, voice, audio))
-    #         voice.is_playing()
-
-    #     if channel and not voice.is_playing():
-    #         audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query, executable=FFMPEG_BIN_PATH))
-    #         voice.play(audio, after=lambda e: repeat(ctx.guild, voice, audio))
-    #         voice.is_playing()
 
     # region
     
@@ -160,7 +110,7 @@ class Music(commands.Cog):
     async def gachi(self, ctx, *args):
         """Gachi command"""
         query = ' '.join(args)
-        gachi_dict = self.g.validate_gachi(query)
+        gachi_dict = self.g_handler.validate_gachi(query)
         if len(gachi_dict) == 0: 
             await ctx.send('Not Found')
             return

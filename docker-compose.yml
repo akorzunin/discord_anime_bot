@@ -10,6 +10,9 @@ services:
       - .env
     volumes:
       - ./data:/app/data
+  # ffmpeg:
+  #   image: linuxserver/ffmpeg:latest
+  #   container_name: ffmpeg
   # mongodb:
   #     image: mongo:5.0
   #     container_name: mongodb
