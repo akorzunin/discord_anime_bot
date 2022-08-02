@@ -1,26 +1,20 @@
-# sourcery skip: swap-if-expression
 import asyncio
 import logging
-
 import os
 import youtube_dl
-from datetime import datetime
-from time import sleep
-import platform
 from tinydb import TinyDB, Query
 import discord
 from discord.ext import commands
 
-
 from modules.BasicCommands import Basic
 from modules.AnimePic import AnimePic
+from modules.BotSlashCommands import BotSlashCommands
 from modules.MusicCommands import Music
 from modules.AnimeChCommands import AnimeCh
 from modules.DailyTask import DailyTask
 from modules.AnimePictureApi import AnimePicture
-from modules.db_connector import db, memes
-from static_data.categories_list import categories, nsfw_categories
-
+from modules.db_connector import db, memes, stickers
+from static_data.guilds import knownd_guilds, debug_guild_id
 
 #load .env variables
 import os
@@ -30,27 +24,20 @@ load_dotenv()
 PWD = os.path.abspath(os.getcwd())
 PREFIX = os.getenv('PREFIX', '.')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH', None)
-LOGGING_LEVEL = os.getenv('LOGGING_LEVEL', logging.INFO)
+LOGGING_LEVEL = int(os.getenv('LOGGING_LEVEL', logging.INFO))
+DEBUG = bool(os.getenv('DEBUG')) 
 
-import logging
-DEBUG = __debug__ 
-LOG_FILE_NAME = 'logs.log'
 format = '%(asctime)s [%(levelname)s]: %(message)s'
 logger = logging.basicConfig(
-    filename=LOG_FILE_NAME if not DEBUG else None, 
     format=format,
     encoding='utf-8', 
     level=LOGGING_LEVEL, 
 )
-if not DEBUG:
-    logging.getLogger(logger).addHandler(logging.StreamHandler())
+
 
 
 youtube_dl.utils.bug_reports_message = lambda: ''
-if platform.system() == "Windows":
-    FFMPEG_BIN_PATH = "C:/PATH_programms/ffmpeg.exe"
-    # FFMPEG_BIN_PATH = os.getenv('FFMPEG_BIN_PATH')
+
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -69,8 +56,11 @@ ffmpeg_options = {
 }
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
-                   description='description')
+bot = commands.Bot(
+    command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
+    description='description',
+    intents=discord.Intents.all(),    
+)
 
 a = AnimePicture()
 
@@ -82,27 +72,43 @@ async def on_message(message):
     # user <@!{int}> 
     # role <@&{int}>
     if message.content.startswith(f'{PREFIX}<@'):
-        logging.debug(message.content)
+        # logging.debug(message.content)
         await message.channel.send(f'{a.get_url()}')
+    #handle stickers
+    if message.content.startswith(f'{PREFIX}:'):
+        name = message.content.split(':')[1]
+        image = stickers.search(Query().name == name)[0]['image']
+        # await message.edit(content=image)
+        await message.channel.send(image)
+
 
 @bot.event
 async def on_ready():
     logging.info(f'Logged in as {bot.user} (ID: {bot.user.id})')
     logging.info('------')
-    # logging.info()
-
-if bool(os.getenv('DEBUG')):
-    import nest_asyncio
-    nest_asyncio.apply(bot.loop) 
+    await bot.tree.sync(guild=discord.Object(id=debug_guild_id))
 
 
-bot.add_cog(Basic(bot))
-bot.add_cog(Music(bot))
-bot.add_cog(AnimePic(bot))
-bot.add_cog(AnimeCh(bot))
-bot.add_cog(DailyTask(bot))
 
-def get_event_loop(): return bot.loop
 
-bot.run(BOT_TOKEN)
-# need pynacl
+async def launch_bot():
+
+    if DEBUG:
+        import nest_asyncio
+        loop = asyncio.get_event_loop()
+        nest_asyncio.apply(loop) 
+
+    await bot.add_cog(
+        BotSlashCommands(bot), 
+        guilds=[discord.Object(id = guid_id) for guid_id in knownd_guilds]
+    )
+    await bot.add_cog(Basic(bot))
+    await bot.add_cog(Music(bot))
+    await bot.add_cog(AnimePic(bot))
+    await bot.add_cog(AnimeCh(bot))
+    await bot.add_cog(DailyTask(bot))
+
+    await bot.start(BOT_TOKEN)
+    
+if __name__ == '__main__':
+    asyncio.run(launch_bot())
