@@ -1,23 +1,15 @@
 import logging
-import requests
-import yaml
-
-import os
-PWD = os.path.abspath(os.getcwd())
+from static_data.gachi_dict import gachi_dict
 
 class GachiHandler(object): 
     '''docstring for ClassName'''
     def __init__(self, *args):
-        super(GachiHandler, self).__init__()
-        with open(os.path.join(PWD, 'src', 'static_data', 'gachi_dict.yaml'), 'r') as f: 
-            self.r = yaml.load(f, Loader=yaml.FullLoader)
-
+        self.gach_dict = gachi_dict
 
     def validate_gachi(self, query: str) -> str:
-        r = self.r
         r_val = []
         r_key = []
-        for key, val in r.items():
+        for key, val in self.gach_dict.items():
             if query.lower() in str(key).lower():
                 r_val.append(val)
                 r_key.append(key)

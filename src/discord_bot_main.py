@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from operator import truediv
 import os
 import youtube_dl
 from tinydb import TinyDB, Query
@@ -14,7 +15,7 @@ from modules.AnimeChCommands import AnimeCh
 from modules.DailyTask import DailyTask
 from modules.AnimePictureApi import AnimePicture
 from modules.db_connector import db, memes, stickers
-from static_data.guilds import knownd_guilds, debug_guild_id
+from static_data import guilds
 
 #load .env variables
 import os
@@ -55,11 +56,15 @@ ffmpeg_options = {
     'options': '-vn'
 }
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+intents = discord.Intents.default()
+# intents = discord.Intents.all()
+intents.message_content = True
+# intents.
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
     description='description',
-    intents=discord.Intents.all(),    
+    intents=intents,    
 )
 
 a = AnimePicture()
@@ -86,7 +91,8 @@ async def on_message(message):
 async def on_ready():
     logging.info(f'Logged in as {bot.user} (ID: {bot.user.id})')
     logging.info('------')
-    await bot.tree.sync(guild=discord.Object(id=debug_guild_id))
+    await bot.tree.sync(guild=discord.Object(id=guilds.debug_guild_id))
+    await bot.tree.sync(guild=discord.Object(id=guilds.disboard))
 
 
 
@@ -100,7 +106,8 @@ async def launch_bot():
 
     await bot.add_cog(
         BotSlashCommands(bot), 
-        guilds=[discord.Object(id = guid_id) for guid_id in knownd_guilds]
+        guilds=[discord.Object(id = guid_id) 
+            for guid_id in guilds.knownd_guilds]
     )
     await bot.add_cog(Basic(bot))
     await bot.add_cog(Music(bot))
