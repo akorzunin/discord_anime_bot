@@ -10,11 +10,13 @@ from discord.ext import commands
 from modules.BasicCommands import Basic
 from modules.AnimePic import AnimePic
 from modules.BotSlashCommands import BotSlashCommands
-from modules.MusicCommands import Music
+from modules.GachiCommands import GachiCommands
 from modules.AnimeChCommands import AnimeCh
 from modules.DailyTask import DailyTask
 from modules.AnimePictureApi import AnimePicture
-from modules.db_connector import db, memes, stickers
+from modules.SoundCommands import SoundCommads
+from modules.StickerSlashCommands import StickerSlashCommands
+from modules.db_connector import stickers
 from static_data import guilds
 
 #load .env variables
@@ -94,26 +96,33 @@ async def on_ready():
     await bot.tree.sync(guild=discord.Object(id=guilds.debug_guild_id))
     await bot.tree.sync(guild=discord.Object(id=guilds.disboard))
 
+async def add_slash_cog(bot, cog, *args):
+    await bot.add_cog(
+        cog(bot, *args), 
+        guilds=[discord.Object(id = guid_id) 
+            for guid_id in guilds.knownd_guilds]
+    )
 
-
+from modules.Sound import Sound
 
 async def launch_bot():
-
     if DEBUG:
         import nest_asyncio
         loop = asyncio.get_event_loop()
         nest_asyncio.apply(loop) 
 
-    await bot.add_cog(
-        BotSlashCommands(bot), 
-        guilds=[discord.Object(id = guid_id) 
-            for guid_id in guilds.knownd_guilds]
-    )
+    sound = Sound()
+    await add_slash_cog(bot, BotSlashCommands)
+    await add_slash_cog(bot, StickerSlashCommands)
+
     await bot.add_cog(Basic(bot))
-    await bot.add_cog(Music(bot))
+    # await bot.add_cog(Music(bot))
     await bot.add_cog(AnimePic(bot))
     await bot.add_cog(AnimeCh(bot))
     await bot.add_cog(DailyTask(bot))
+    await bot.add_cog(GachiCommands(bot, sound))
+    await bot.add_cog(SoundCommads(bot, sound))
+
 
     await bot.start(BOT_TOKEN)
     
