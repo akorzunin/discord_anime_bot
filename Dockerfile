@@ -11,8 +11,8 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
 
-# FROM node:alpine
-# RUN apk add  --no-cache ffmpeg
+# install ffmpeg
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends ffmpeg
 
 WORKDIR /app
 COPY . /app
