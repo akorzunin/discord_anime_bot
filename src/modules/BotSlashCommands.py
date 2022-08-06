@@ -3,7 +3,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from modules.Buttons import BannerButtons
+from modules.Buttons import BannerButtons, DetectorButtons
 from modules.RawCommands import RawCommands
 
 class BotSlashCommands(commands.Cog, RawCommands): 
@@ -39,8 +39,14 @@ class BotSlashCommands(commands.Cog, RawCommands):
             content=f'Role {same_roles[0].name} is already exists\nRole id: {same_roles[0].id}', )
 
     @app_commands.command(name = "detector", description = "Detect specified propery of channel memders")
-    async def x_detector(self, interaction : discord.Interaction, ):
-        await interaction.response.send_message(await self.uptime_command())
+    @app_commands.describe(name="Object to detect")
+    async def x_detector(self, interaction : discord.Interaction, name: str):
+        await interaction.response.defer()
+        view = DetectorButtons(name)
+        await interaction.followup.send(
+            content=f'{name} detector', 
+            view=view,
+        )
 
 
 

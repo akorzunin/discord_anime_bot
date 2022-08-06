@@ -1,3 +1,4 @@
+import random
 import discord
 from discord.ui import View
 
@@ -44,3 +45,26 @@ class BannerButtons(View):
         await interaction.user.remove_roles(self.role)
         await interaction.response.send_message(
             content = f"Role {self.role.name} removed!", ephemeral=True)
+
+
+class DetectorButtons(View):
+    def __init__(self, item: str):
+        super().__init__()
+        self.item = item
+
+    @discord.ui.button(
+        label = "Check me", 
+        style = discord.ButtonStyle.green, 
+    )
+    async def check_user(self, interaction:discord.Interaction, button: discord.ui.Button):
+        '''Give new role to user if he dont have it'''
+        if bool(random.getrandbits(1)):
+            await interaction.response.send_message(
+                content = f"You are {self.item}", 
+                ephemeral=True)
+            await interaction.followup.send(
+                content = f"{self.item} found!\nIt's {interaction.user.mention}", )
+            return
+        await interaction.response.send_message(
+            content = f"You are not {self.item}", 
+            ephemeral=True)
