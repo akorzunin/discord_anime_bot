@@ -7,6 +7,7 @@ from tinydb import TinyDB, Query
 import discord
 from discord.ext import commands
 
+from modules.Sound import Sound
 from modules.BasicCommands import Basic
 from modules.AnimePic import AnimePic
 from modules.BotSlashCommands import BotSlashCommands
@@ -37,31 +38,9 @@ logger = logging.basicConfig(
     level=LOGGING_LEVEL, 
 )
 
-
-
-youtube_dl.utils.bug_reports_message = lambda: ''
-
-ytdl_format_options = {
-    'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'restrictfilenames': True,
-    'noplaylist': True,
-    'nocheckcertificate': True,
-    'ignoreerrors': False,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
-    'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
-}
-ffmpeg_options = {
-    'options': '-vn'
-}
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 intents = discord.Intents.default()
 # intents = discord.Intents.all()
 intents.message_content = True
-# intents.
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(f"{PREFIX}"),
@@ -79,13 +58,11 @@ async def on_message(message):
     # user <@!{int}> 
     # role <@&{int}>
     if message.content.startswith(f'{PREFIX}<@'):
-        # logging.debug(message.content)
         await message.channel.send(f'{a.get_url()}')
     #handle stickers
     if message.content.startswith(f'{PREFIX}:'):
         name = message.content.split(':')[1]
         image = stickers.search(Query().name == name)[0]['image']
-        # await message.edit(content=image)
         await message.channel.send(image)
 
 
@@ -103,7 +80,6 @@ async def add_slash_cog(bot, cog, *args):
             for guid_id in guilds.knownd_guilds]
     )
 
-from modules.Sound import Sound
 
 async def launch_bot():
     if DEBUG:
@@ -114,14 +90,13 @@ async def launch_bot():
     sound = Sound()
     await add_slash_cog(bot, BotSlashCommands)
     await add_slash_cog(bot, StickerSlashCommands)
+    await add_slash_cog(bot, SoundCommads, sound)
+    await add_slash_cog(bot, GachiCommands, sound)
 
     await bot.add_cog(Basic(bot))
-    # await bot.add_cog(Music(bot))
     await bot.add_cog(AnimePic(bot))
     await bot.add_cog(AnimeCh(bot))
     await bot.add_cog(DailyTask(bot))
-    await bot.add_cog(GachiCommands(bot, sound))
-    await bot.add_cog(SoundCommads(bot, sound))
 
 
     await bot.start(BOT_TOKEN)

@@ -6,6 +6,7 @@ import discord
 import requests
 import youtube_dl
 from discord.ext import tasks
+from discord.ext.commands import CommandError
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 if platform.system() == "Windows":
@@ -103,3 +104,19 @@ class Sound():
             if not ctx.voice_client.is_playing():
                 self.setup_disconnect_timer.start(ctx)
                 self.wathchdog_timer.stop()
+
+    async def _leave_voice(self, ctx):
+        if not self.wathchdog_timer.is_running():
+            self.wathchdog_timer.start(ctx)
+
+    async def _ensure_voice(self, ctx):
+        if ctx.voice_client is None:
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+                return
+            await ctx.send("You are not connected to a voice channel.")
+            raise CommandError("Author not connected to a voice channel.")
+        elif ctx.voice_client.is_playing():
+            ctx.voice_client.stop()
+            return
+        self.setup_disconnect_timer.cancel()
